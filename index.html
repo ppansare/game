@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Hearts - Valentine's Game</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #ffcccb;
+            font-family: Arial, sans-serif;
+        }
+        #gameContainer {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            border: 3px solid #ff4081;
+            margin: auto;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #ff99aa, #ffcccb);
+        }
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: red;
+            clip-path: polygon(50% 0%, 100% 30%, 85% 100%, 50% 80%, 15% 100%, 0% 30%);
+        }
+        #basket {
+            position: absolute;
+            width: 80px;
+            height: 50px;
+            bottom: 10px;
+            left: 160px;
+            background: brown;
+            border-radius: 10px;
+        }
+        #scoreBoard {
+            font-size: 20px;
+            margin: 10px;
+        }
+        #footer {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #d63384;
+        }
+        #gameOverScreen {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #gameOverScreen img {
+            width: 100%;
+            max-height: 40vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Happy Valentine's Day, Sadhana! ❤️</h1>
+    <p>Thank You for everything, Our 1st Valentine. I miss you! 💕</p>
+    <p>Dil bhej rha hu, catch in the basket. Move the basket left and right.</p>
+    <div id="scoreBoard">Score: 0</div>
+    <div id="gameContainer">
+        <div id="basket"></div>
+    </div>
+    <div id="gameOverScreen">
+        <h2>🎉 Happy 11 Months to us! 🎉</h2>
+        <p>Happy Valentine's Day, Nenuaaa! I love You ❤️</p>
+        <img src="attached_assets/db88c6c3-abb7-4d0d-9f14-bd4e68a3c167.JPG" alt="Valentine's Photo">
+        <div class="tenor-gif-embed" data-postid="17956611041248891945" data-share-method="host" data-aspect-ratio="1.1422" data-width="100%"></div>
+        <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    </div>
+    <div id="footer">Pyaar se banaya for my nenuaa ❤️ Jay</div>
+    
+    <script>
+        const gameContainer = document.getElementById("gameContainer");
+        const basket = document.getElementById("basket");
+        const scoreBoard = document.getElementById("scoreBoard");
+        const gameOverScreen = document.getElementById("gameOverScreen");
+        let score = 0;
+        let basketPosition = 160;
+        const basketSpeed = 20;
+        
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "ArrowLeft" && basketPosition > 0) {
+                basketPosition -= basketSpeed;
+            } else if (event.key === "ArrowRight" && basketPosition < 320) {
+                basketPosition += basketSpeed;
+            }
+            basket.style.left = basketPosition + "px";
+        });
+        
+        function createHeart() {
+            if (score >= 11) return;
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * 370 + "px";
+            heart.style.top = "0px";
+            gameContainer.appendChild(heart);
+            moveHeart(heart);
+        }
+        
+        function moveHeart(heart) {
+            let heartInterval = setInterval(() => {
+                let heartTop = parseInt(heart.style.top);
+                heart.style.top = heartTop + 5 + "px";
+                if (heartTop > 450) {
+                    let heartLeft = parseInt(heart.style.left);
+                    if (heartLeft > basketPosition && heartLeft < basketPosition + 80) {
+                        score++;
+                        scoreBoard.innerText = "Score: " + score;
+                        if (score === 11) {
+                            endGame();
+                        }
+                    }
+                    heart.remove();
+                    clearInterval(heartInterval);
+                }
+            }, 50);
+        }
+        
+        function endGame() {
+            gameContainer.style.display = "none";
+            scoreBoard.style.display = "none";
+            gameOverScreen.style.display = "block";
+        }
+        
+        setInterval(createHeart, 1000);
+    </script>
+</body>
+</html>
